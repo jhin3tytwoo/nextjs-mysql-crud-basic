@@ -1,7 +1,16 @@
-'use client';
+"use client";
 
-import { useEffect, useState } from 'react';
-import { UserPlus, UserCheck, Edit2, Trash2, RefreshCw, AlertCircle, CheckCircle2 } from 'lucide-react';
+import { useEffect, useState } from "react";
+import {
+  UserPlus,
+  UserCheck,
+  Edit2,
+  Trash2,
+  RefreshCw,
+  AlertCircle,
+  CheckCircle2,
+} from "lucide-react";
+import Link from "next/link";
 
 type User = {
   id: number;
@@ -11,12 +20,12 @@ type User = {
 
 const UsersPage = () => {
   const [users, setUsers] = useState<User[]>([]);
-  const [name, setName] = useState('');
-  const [email, setEmail] = useState('');
+  const [name, setName] = useState("");
+  const [email, setEmail] = useState("");
   const [editUserId, setEditUserId] = useState<number | null>(null);
   const [isLoading, setIsLoading] = useState(false);
   const [notification, setNotification] = useState<{
-    type: 'success' | 'error';
+    type: "success" | "error";
     message: string;
   } | null>(null);
 
@@ -26,7 +35,7 @@ const UsersPage = () => {
   }, []);
 
   // Show notification and auto-dismiss
-  const showNotification = (type: 'success' | 'error', message: string) => {
+  const showNotification = (type: "success" | "error", message: string) => {
     setNotification({ type, message });
     setTimeout(() => setNotification(null), 3000);
   };
@@ -34,12 +43,12 @@ const UsersPage = () => {
   const fetchUsers = async () => {
     setIsLoading(true);
     try {
-      const res = await fetch('/api/users');
+      const res = await fetch("/api/users");
       const data = await res.json();
       setUsers(data);
     } catch (error) {
-      console.error('Failed to fetch users:', error);
-      showNotification('error', 'Failed to load users');
+      console.error("Failed to fetch users:", error);
+      showNotification("error", "Failed to load users");
     } finally {
       setIsLoading(false);
     }
@@ -47,87 +56,92 @@ const UsersPage = () => {
 
   const addUser = async () => {
     if (!name || !email) {
-      showNotification('error', 'Please fill in both name and email');
+      showNotification("error", "Please fill in both name and email");
       return;
     }
 
     try {
-      const response = await fetch('/api/users', {
-        method: 'POST',
+      const response = await fetch("/api/users", {
+        method: "POST",
         body: JSON.stringify({ name, email }),
-        headers: { 'Content-Type': 'application/json' },
+        headers: { "Content-Type": "application/json" },
       });
       const newUser = await response.json();
       setUsers([...users, newUser]);
-      setName('');
-      setEmail('');
-      showNotification('success', 'User added successfully');
+      setName("");
+      setEmail("");
+      showNotification("success", "User added successfully");
     } catch (error) {
-      console.error('Failed to add user:', error);
-      showNotification('error', 'Failed to add user');
+      console.error("Failed to add user:", error);
+      showNotification("error", "Failed to add user");
     }
   };
 
   const updateUser = async () => {
     if (!name || !email) {
-      showNotification('error', 'Please fill in both name and email');
+      showNotification("error", "Please fill in both name and email");
       return;
     }
 
     try {
-      const response = await fetch('/api/users', {
-        method: 'PUT',
+      const response = await fetch("/api/users", {
+        method: "PUT",
         body: JSON.stringify({ id: editUserId, name, email }),
-        headers: { 'Content-Type': 'application/json' },
+        headers: { "Content-Type": "application/json" },
       });
       const updatedUser = await response.json();
-      setUsers(users.map((user) => (user.id === editUserId ? updatedUser : user)));
-      setName('');
-      setEmail('');
+      setUsers(
+        users.map((user) => (user.id === editUserId ? updatedUser : user))
+      );
+      setName("");
+      setEmail("");
       setEditUserId(null);
-      showNotification('success', 'User updated successfully');
+      showNotification("success", "User updated successfully");
     } catch (error) {
-      console.error('Failed to update user:', error);
-      showNotification('error', 'Failed to update user');
+      console.error("Failed to update user:", error);
+      showNotification("error", "Failed to update user");
     }
   };
 
   const deleteUser = async (id: number) => {
-    const confirmDelete = window.confirm('Are you sure you want to delete this user?');
+    const confirmDelete = window.confirm(
+      "Are you sure you want to delete this user?"
+    );
     if (!confirmDelete) return;
 
     try {
-      await fetch('/api/users', {
-        method: 'DELETE',
+      await fetch("/api/users", {
+        method: "DELETE",
         body: JSON.stringify({ id }),
-        headers: { 'Content-Type': 'application/json' },
+        headers: { "Content-Type": "application/json" },
       });
       setUsers(users.filter((user) => user.id !== id));
-      showNotification('success', 'User deleted successfully');
+      showNotification("success", "User deleted successfully");
     } catch (error) {
-      console.error('Failed to delete user:', error);
-      showNotification('error', 'Failed to delete user');
+      console.error("Failed to delete user:", error);
+      showNotification("error", "Failed to delete user");
     }
   };
 
   const cancelEdit = () => {
     setEditUserId(null);
-    setName('');
-    setEmail('');
+    setName("");
+    setEmail("");
   };
 
   return (
     <div className="min-h-screen bg-gray-50 py-12 px-4 sm:px-6 lg:px-8">
       {/* Notification Area */}
       {notification && (
-        <div 
+        <div
           className={`fixed top-4 right-4 z-50 px-6 py-4 rounded-xl shadow-lg transition-all duration-300 
-            ${notification.type === 'success' 
-              ? 'bg-green-500 text-white' 
-              : 'bg-red-500 text-white'
+            ${
+              notification.type === "success"
+                ? "bg-green-500 text-white"
+                : "bg-red-500 text-white"
             }`}
         >
-          {notification.type === 'success' ? (
+          {notification.type === "success" ? (
             <CheckCircle2 className="inline-block mr-2 -mt-1" />
           ) : (
             <AlertCircle className="inline-block mr-2 -mt-1" />
@@ -160,7 +174,7 @@ const UsersPage = () => {
               onChange={(e) => setEmail(e.target.value)}
               className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 transition duration-300 md:col-span-1"
             />
-            
+
             <div className="flex space-x-2 md:col-span-1">
               {editUserId ? (
                 <>
@@ -196,15 +210,17 @@ const UsersPage = () => {
           <div className="border-t pt-6">
             <h2 className="text-xl font-semibold mb-4 text-gray-700 flex items-center justify-between">
               <span>User List</span>
-              <button 
-                onClick={fetchUsers} 
+              <button
+                onClick={fetchUsers}
                 disabled={isLoading}
                 className="text-blue-500 hover:text-blue-700 disabled:opacity-50"
               >
-                <RefreshCw className={`h-5 w-5 ${isLoading ? 'animate-spin' : ''}`} />
+                <RefreshCw
+                  className={`h-5 w-5 ${isLoading ? "animate-spin" : ""}`}
+                />
               </button>
             </h2>
-            
+
             {isLoading ? (
               <div className="text-center py-8">
                 <div className="animate-pulse flex justify-center items-center space-x-4">
@@ -234,6 +250,12 @@ const UsersPage = () => {
                       <p className="text-gray-600 text-sm">{user.email}</p>
                     </div>
                     <div className="flex space-x-4">
+                      <Link
+                        href={`/users/${user.id}`}
+                        className="text-blue-500 hover:text-blue-700 transition duration-300 opacity-0 group-hover:opacity-100"
+                      >
+                        View Details
+                      </Link>
                       <button
                         onClick={() => {
                           setEditUserId(user.id);
@@ -242,13 +264,13 @@ const UsersPage = () => {
                         }}
                         className="text-blue-500 hover:text-blue-700 transition duration-300 opacity-0 group-hover:opacity-100"
                       >
-                        <Edit2 className="h-5 w-5" />
+                        Edit
                       </button>
                       <button
                         onClick={() => deleteUser(user.id)}
                         className="text-red-500 hover:text-red-700 transition duration-300 opacity-0 group-hover:opacity-100"
                       >
-                        <Trash2 className="h-5 w-5" />
+                        Delete
                       </button>
                     </div>
                   </li>

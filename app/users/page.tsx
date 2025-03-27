@@ -4,8 +4,6 @@ import { useEffect, useState } from "react";
 import {
   UserPlus,
   UserCheck,
-  Edit2,
-  Trash2,
   RefreshCw,
   AlertCircle,
   CheckCircle2,

@@ -1,8 +1,14 @@
-'use client';
+"use client";
 
-import { useEffect, useState } from 'react';
-import { useParams, useRouter } from 'next/navigation';
-import { UserCircle2, Mail, ArrowLeft, Calendar  } from 'lucide-react';
+import { useEffect, useState } from "react";
+import { useParams, useRouter } from "next/navigation";
+import {
+  UserCircle2,
+  Mail,
+  ArrowLeft,
+  Calendar,
+  AlertCircle,
+} from "lucide-react";
 
 type UserDetails = {
   id: number;
@@ -24,16 +30,16 @@ const UserDetailsPage = () => {
       try {
         const userId = params.id;
         const response = await fetch(`/api/users/${userId}`);
-        
+
         if (!response.ok) {
-          throw new Error('Failed to fetch user details');
+          throw new Error("Failed to fetch user details");
         }
 
         const userData = await response.json();
         setUser(userData);
       } catch (err) {
         console.error(err);
-        setError('Unable to load user details');
+        setError("Unable to load user details");
       } finally {
         setIsLoading(false);
       }
@@ -58,9 +64,9 @@ const UserDetailsPage = () => {
       <div className="min-h-screen bg-gray-50 flex items-center justify-center">
         <div className="text-center">
           <AlertCircle className="mx-auto h-16 w-16 text-red-500" />
-          <p className="mt-4 text-red-600">{error || 'User not found'}</p>
-          <button 
-            onClick={() => router.push('/users')} 
+          <p className="mt-4 text-red-600">{error || "User not found"}</p>
+          <button
+            onClick={() => router.push("/users")}
             className="mt-4 bg-blue-500 text-white px-4 py-2 rounded-lg hover:bg-blue-600"
           >
             Back to Users
@@ -74,8 +80,8 @@ const UserDetailsPage = () => {
     <div className="min-h-screen bg-gray-50 py-12 px-4 sm:px-6 lg:px-8">
       <div className="max-w-2xl mx-auto bg-white shadow-2xl rounded-3xl overflow-hidden">
         <div className="bg-gradient-to-r from-blue-600 to-purple-700 p-6">
-          <button 
-            onClick={() => router.push('/users')}
+          <button
+            onClick={() => router.push("/users")}
             className="text-white hover:bg-blue-700 p-2 rounded-full mb-4 transition duration-300"
           >
             <ArrowLeft className="h-6 w-6" />

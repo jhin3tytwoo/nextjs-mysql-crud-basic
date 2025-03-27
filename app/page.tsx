@@ -1,8 +1,8 @@
 // app/page.tsx
-'use client';
+"use client";
 
-import Link from 'next/link';
-import { ArrowRightIcon } from 'lucide-react';
+import Link from "next/link";
+import { ArrowRightIcon } from "lucide-react";
 
 const HomePage = () => {
   return (
@@ -16,15 +16,15 @@ const HomePage = () => {
             Streamline your user administration with our intuitive platform.
           </p>
         </div>
-        
+
         <div className="bg-blue-50 p-4 rounded-lg mb-6">
           <p className="text-blue-700 italic">
             Manage users efficiently and effectively
           </p>
         </div>
-        
-        <Link 
-          href="/users" 
+
+        <Link
+          href="/users"
           className="inline-flex items-center justify-center w-full py-3 px-6 
                      bg-blue-500 text-white font-semibold rounded-lg 
                      hover:bg-blue-600 transition-colors 
